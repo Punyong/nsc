@@ -2,9 +2,9 @@ const Discord = require('discord.js');
 const client = new Discord.Client({ intents: ["GUILDS", "GUILD_MESSAGES"]});
 const prefix = '.';
 const { MessageEmbed } = require('discord.js');
-
 const fs = require('fs')
-var xpPath = `./storage.json`;
+
+var xpPath = "./storage.json";
 var xpRead = fs.readFileSync(xpPath);
 var xpFile = JSON.parse(xpRead);
 var log = "./log.txt";
@@ -29,7 +29,7 @@ client.on('messageCreate', message =>{
     const command = args.shift().toLowerCase();
 
     if(command === 'info'){
-        message.channel.send(codeBlock("NSC manager by Axel et Damien\n\n.info  : montre ce message\n.rules : affiche le lien du règlement\n.lb    : affiche un classement des mots\n\nInfos salons :\n\nno-sense-chat   : salon principal\nnsc-info        : annonces en rapport au nsc\nnsc-lb          : classement du nsc mis à jour le dimanche\nréclamation-nsc : demandes de suppression de messages et autres requêtes\npolls           : votes pour décider des mots polémiques\nlogs            : fil d'activité du NSC et alertes doublons"));
+        message.channel.send(codeBlock("NSC manager par Axel et Damien\n\n.info  : montre ce message\n.rules : affiche le lien du règlement\n.lb    : affiche un classement des mots\n\nInfos salons :\n\nno-sense-chat   : salon principal\nnsc-info        : annonces en rapport au nsc\nnsc-lb          : classement du nsc mis à jour le dimanche\nréclamation-nsc : demandes de suppression de messages et autres requêtes\npolls           : votes pour décider des mots polémiques\nlogs            : fil d'activité du NSC et alertes doublons"));
         
     }
     
@@ -69,6 +69,27 @@ client.on('messageCreate', message =>{
     
     }
 
+    if(command === 'change'){
+        if(message.author.id === '296007985736450059' || message.author.id === '295550531907354624'){
+            if (!args.length) {
+			return message.channel.send(`Syntaxe : userID +/-, ${message.author}!`);}
+
+            if(args[0] === '296007985736450059' || args[0] === '295550531907354624' || args[0] === '498872017383194624' || args[0] === '694108010871783495' || args[0] === '657126752476200981' || args[0] === '400704659532152842' || args[0] === '287976670084726785' || args[0] === '528278073368379402'){
+                if(args[1] === '+'){
+                    var xppVar = Number(xpFile[args[0]].xpp) + 1
+                    xpFile[args[0]] = {xpp: xppVar, Name: xpFile[args[0]].Name};
+                    fs.writeFileSync(xpPath, JSON.stringify(xpFile, null, 2));
+                    message.channel.send("Score de " + xpFile[args[0]].Name + " mis à " + xppVar)
+                    client.channels.cache.get('988165549609594931').send(":pencil2: Score de " + xpFile[args[0]].Name + " ajusté à " + xppVar)}
+                if(args[1] === '-'){
+                    var xppVar = Number(xpFile[args[0]].xpp) - 1
+                    xpFile[args[0]] = {xpp: xppVar, Name: xpFile[args[0]].Name};
+                    fs.writeFileSync(xpPath, JSON.stringify(xpFile, null, 2));
+                    message.channel.send("Score de " + xpFile[args[0]].Name + " mis à " + xppVar)
+                    client.channels.cache.get('988165549609594931').send(":pencil2: Score de " + xpFile[args[0]].Name + " ajusté à " + xppVar)}
+        } else message.channel.send("tu essaies de faire quoi au juste ?")
+    }}
+    
     if(command === 'set'){
         if(message.author.id === '296007985736450059' || message.author.id === '295550531907354624'){
             if (!args.length) {
@@ -77,10 +98,11 @@ client.on('messageCreate', message =>{
             if(args[0] === '296007985736450059' || args[0] === '295550531907354624' || args[0] === '498872017383194624' || args[0] === '694108010871783495' || args[0] === '657126752476200981' || args[0] === '400704659532152842' || args[0] === '287976670084726785' || args[0] === '528278073368379402'){
                 xpFile[args[0]] = {xpp: Number(args[1]), Name: xpFile[args[0]].Name};}
                 fs.writeFileSync(xpPath, JSON.stringify(xpFile, null, 2));
-
+                message.channel.send(`Score de ${xpFile[args[0]].Name} mis à ${args[1]}`)
+                client.channels.cache.get('988165549609594931').send(":pencil2: Score de " + xpFile[args[0]].Name + " ajusté à " + args[1])
         } else message.channel.send("tu essaies de faire quoi au juste ?")
     }
-    
+
     if(message.channel.name === 'no-sense-chat' && !message.author.bot){
         var userId = message.author.id
         if (!xpFile[userId]) {
@@ -92,7 +114,7 @@ client.on('messageCreate', message =>{
                 fs.writeFileSync(xpPath, JSON.stringify(xpFile, null, 2));
 
         }
-     }
+    }
    
     if(message.channel.name === 'no-sense-chat' && !message.author.bot){
         let mlog = message.content.toLocaleLowerCase()
@@ -123,7 +145,7 @@ client.on('messageCreate', message =>{
 
 client.on("messageDelete", (message) => {
     if(message.channel.name === 'no-sense-chat' && !message.author.bot) {
-    client.channels.cache.get('988165549609594931').send(":question: Soumission suivante supprimée : " + message.content)
+    client.channels.cache.get('988165549609594931').send(":x: Soumission suivante supprimée : " + message.content)
     }
     });
 
