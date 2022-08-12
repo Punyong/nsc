@@ -4,10 +4,10 @@ const prefix = '.';
 const { MessageEmbed } = require('discord.js');
 
 const fs = require('fs')
-var xpPath = "/Users/Fuki/Documents/nsc/nsc/storage.json"
+var xpPath = `./storage.json`;
 var xpRead = fs.readFileSync(xpPath);
 var xpFile = JSON.parse(xpRead);
-var log = "/Users/Fuki/Documents/nsc/nsc/log.txt"
+var log = "./log.txt";
 
 const { inlineCode, codeBlock, hyperlink } = require('@discordjs/builders');
 const jsString = 'const value = true;';
